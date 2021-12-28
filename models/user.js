@@ -4,16 +4,10 @@ const uuidv1 = require("uuid/v1");
 
 var userSchema = new mongoose.Schema(
   {
-    firstName: {
+    name: {
       type: String,
       required: true,
       maxlength: 32,
-      trim: true
-    },
-    lastName: {
-      type: String,
-      maxlength: 32,
-      required:true,
       trim: true
     },
     username: {
@@ -21,16 +15,24 @@ var userSchema = new mongoose.Schema(
       maxlength: 32,
       required:true,
       trim: true,
+      unique: true,
+    },
+    phone: {
+      type: String,
+      maxlength: 12,
+      required:true,
+      trim: true,
     },
     email: {
       type: String,
+      maxlength: 50,
       trim: true,
-      required: true,
-      unique: true
+      default: ""
     },
     userInfo: {
       type: String,
-      trim: true
+      trim: true,
+      default: ""
     },
     encry_password: {
       type: String,
@@ -53,11 +55,6 @@ var userSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
-    contact: {
-      requried:true,
-      type: String,
-      default: "",
-    }
   },
   { timestamps: true }
 );

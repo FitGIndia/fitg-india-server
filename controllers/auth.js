@@ -14,6 +14,7 @@ exports.signup = (req, res) => {
   }
 
   const user = new User(req.body);
+  console.log("user before save in db", user);
   user.save((err, user) => {
     if (err) {
       return res.status(400).json({
@@ -31,7 +32,7 @@ exports.signup = (req, res) => {
 
 exports.signin = (req, res) => {
   const errors = validationResult(req);
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   if (!errors.isEmpty()) {
     return res.status(422).json({
@@ -39,16 +40,16 @@ exports.signin = (req, res) => {
     });
   }
 
-  User.findOne({ email }, (err, user) => {
+  User.findOne({ username }, (err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: "User email does not exists"
+        error: "user does not exists"
       });
     }
 
     if (!user.autheticate(password)) {
       return res.status(401).json({
-        error: "Email and password do not match"
+        error: "username and password do not match"
       });
     }
 
