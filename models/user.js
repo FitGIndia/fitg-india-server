@@ -16,6 +16,12 @@ var userSchema = new mongoose.Schema(
       required:true,
       trim: true
     },
+    username: {
+      type: String,
+      maxlength: 32,
+      required:true,
+      trim: true,
+    },
     email: {
       type: String,
       trim: true,
@@ -35,9 +41,22 @@ var userSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
-    purchases: {
+    orders: {
       type: Array,
       default: []
+    },
+    plans: {
+      type: Array,
+      default: []
+    },
+    cart: {
+      type: Array,
+      default: []
+    },
+    contact: {
+      requried:true,
+      type: String,
+      default: "",
     }
   },
   { timestamps: true }

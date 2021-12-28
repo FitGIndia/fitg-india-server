@@ -42,7 +42,7 @@ exports.signin = (req, res) => {
   User.findOne({ email }, (err, user) => {
     if (err || !user) {
       return res.status(400).json({
-        error: "USER email does not exists"
+        error: "User email does not exists"
       });
     }
 
@@ -58,8 +58,8 @@ exports.signin = (req, res) => {
     res.cookie("token", token, { expire: new Date() + 9999 });
 
     //send response to front end
-    const { _id, name, email, role } = user;
-    return res.json({ token, user: { _id, name, email, role } });
+    const { _id, firstName, lastName,email, username, role, cart, plans, orders, contact } = user;
+    return res.json({ token, user: { _id, firstName,email, lastName, username, role, cart, plans, orders, contact } });
   });
 };
 
