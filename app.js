@@ -38,6 +38,10 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(cookieParser())
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
 //My Routes
 app.use('/api', authRoutes)
 app.use('/api', userRoutes)
