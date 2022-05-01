@@ -1,48 +1,79 @@
-const mongoose = require("mongoose");
-const{ObjectId} = mongoose.Schema;
+const mongoose = require('mongoose')
+const { ObjectId } = mongoose.Schema
 
 const gymSchema = new mongoose.Schema({
-name: {
+  gym_name: {
     required: true,
     type: String,
     trim: true,
     maxlenght: 32,
-},
+  },
 
-owner:{
-    type : ObjectId,
-    ref: "User",
-    // required: true,
-},
-
-Admins:{
-    type: Array,
-    default: [],
-},
-
-About:{
+  username: {
+    required: true,
     type: String,
-    maxlenght:250
-},
+    trim: true,
+    maxlenght: 32,
+    unique: true,
+  },
 
-plans:{
-    type:ObjectId,
-    ref:"Product"
-},
+  image: {
+    data: Buffer,
+    contentType: String,
+  },
 
-location:{
-    street :{
-        type: String,
+  gym_mode: {
+    type: String,
+    required: true,
+  },
+
+  owner: {
+    type: ObjectId,
+    ref: 'User',
+    // required: true,
+  },
+
+  admins: [
+    {
+      type: ObjectId,
+      ref: 'User',
     },
-    landmark:{
-        type:String,
+  ],
+
+  about: {
+    type: String,
+    maxlenght: 250,
+  },
+
+  ratings: {
+    type: Number,
+    Required: true,
+    default: 0,
+  },
+
+  plans: {
+    type: ObjectId,
+    ref: 'Product',
+  },
+
+  location: {
+    street: {
+      type: String,
+      required: true,
     },
-    pin:{
-        type: Number,
-        default: 0,
-    }
+    landmark: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    pin: {
+      type: Number,
+      required: true,
+    },
+  },
+})
 
-}
-});
-
-module.exports = mongoose.model("Gym", gymSchema );
+module.exports = mongoose.model('Gym', gymSchema)
