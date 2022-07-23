@@ -1,8 +1,8 @@
 const Gym = require('../models/gym')
-const formidable = require('formidable')
+const User = require('../models/user')
 const _ = require('lodash')
 const fs = require('fs')
-const { Formidable } = require('formidable')
+const { updateUser } = require('./user')
 
 exports.getGymById = (req, res, next, id) => {
   Gym.findById(id).exec((err, gym) => {
@@ -17,49 +17,52 @@ exports.getGymById = (req, res, next, id) => {
 }
 
 exports.addGym = (req, res) => {
-  let form = new formidable.IncomingForm()
-  form.keepExtensions = true
+  // console.log('we reached here', req.body, res.locals.url)
+  const fields = req.body
+  const images = res.locals.urls
 
-  form.parse(req, (err, fields, file) => {
+  let gym = new Gym(fields)
+  gym.address.street = fields.street
+  gym.address.landmark = fields.landmark
+  gym.address.state = fields.state
+  gym.address.pin = fields.pin
+  gym.owner = req.profile._id
+  gym.images = images
+
+  //Save to the DB
+  console.log(gym)
+
+  gym.save((err, gym) => {
     if (err) {
+      console.log(err)
       return res.status(400).json({
-        error: 'Problem with Image',
+        err: 'Failed to register gym',
       })
     }
-    //TODO: restrictions on fields
-    let gym = new Gym(fields)
+    let set = { role: 1 }
+    let id = gym.owner
 
-    gym.location.street = fields.street
-    gym.location.landmark = fields.landmark
-    gym.location.state = fields.state
-    gym.location.pin = fields.pin
-    gym.owner = req.profile._id
+    //Updating user role to admin
+    User.findByIdAndUpdate(
+      { _id: id },
+      { $set: set },
+      { new: true, useFindAndModify: false },
+      (err, user) => {
+        if (err) {
+          console.log('error while updating', err)
+          return res.status(400).json({
+            error: 'You are not authorized to update this user',
+          })
+        }
 
-    if (file.image) {
-      if (file.image.size > 2000000) {
-        return res.status(400).json({
-          error: 'file size too big',
+        res.status(200).json({
+          msg: `Gym registered successfully`,
+          gymid: gym._id,
+          name: gym.name,
+          role: user.role,
         })
       }
-      gym.image.data = fs.readFileSync(file.image.path)
-      gym.image.contentType = file.image.type
-    }
-
-    //Save to the DB
-    console.log(gym)
-
-    gym.save((err, gym) => {
-      if (err) {
-        console.log(err)
-        return res.status(400).json({
-          err: 'Failed to register gym',
-        })
-      }
-      res.json({
-        msg: `Gym registered successfully`,
-        gymid: gym._id,
-        name: gym.name,
-      })
-    })
+    )
   })
+  // })
 }

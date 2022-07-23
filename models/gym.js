@@ -17,10 +17,18 @@ const gymSchema = new mongoose.Schema({
     unique: true,
   },
 
-  image: {
+  display_image: {
     data: Buffer,
     contentType: String,
   },
+
+  images: [
+    {
+      url: {
+        type: String,
+      },
+    },
+  ],
 
   gym_mode: {
     type: String,
@@ -41,14 +49,22 @@ const gymSchema = new mongoose.Schema({
   ],
 
   about: {
-    type: String,
-    maxlenght: 250,
+    tags: [],
+    bio: {
+      type: String,
+      maxlenght: 250,
+    },
   },
 
-  ratings: {
+  rating: {
     type: Number,
     Required: true,
     default: 0,
+  },
+
+  reviews: {
+    type: ObjectId,
+    ref: 'Reviews',
   },
 
   plans: {
@@ -56,7 +72,21 @@ const gymSchema = new mongoose.Schema({
     ref: 'Product',
   },
 
-  location: {
+  youtube: {
+    type: String,
+    maxlenght: 40,
+  },
+
+  timing: {
+    morning: {
+      type: String,
+    },
+    evening: {
+      type: String,
+    },
+  },
+
+  address: {
     street: {
       type: String,
       required: true,
