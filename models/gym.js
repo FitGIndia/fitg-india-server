@@ -104,6 +104,18 @@ const gymSchema = new mongoose.Schema({
       required: true,
     },
   },
+
+  geo_location: {
+    type: {
+      type: String,
+      enum: ['Point'], // 'location.type' must be 'Point'
+      // required: true
+    },
+    coordinates: {
+      type: [Number],
+      // required: true
+    },
+  },
 })
 
 module.exports = mongoose.model('Gym', gymSchema)

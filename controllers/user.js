@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const GymRequest = require('../models/gymrequest')
 
 exports.getUserById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
@@ -36,4 +37,22 @@ exports.updateUser = (req, res) => {
       }
     }
   )
+}
+
+exports.createRequest = (req, res) => {
+  console.log('request before save in db', req.body)
+
+  const gymRequest = new GymRequest(req.body)
+  // console.log("request before save in db",gymRequest, req.body);
+  gymRequest.save((err, gymRequest) => {
+    if (err) {
+      return res.status(400).json({
+        error: 'NOT able to save request in DB' + err,
+      })
+    }
+    res.json({
+      email: gymRequest.email,
+      id: gymRequest._id,
+    })
+  })
 }

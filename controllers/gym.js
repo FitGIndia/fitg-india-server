@@ -16,6 +16,56 @@ exports.getGymById = (req, res, next, id) => {
   })
 }
 
+exports.getGymsById = (req, res) => {
+  const userId = req.params.id
+  console.log('getGymByID hit', userId)
+  Gym.find({ _id: userId }).exec((err, gym) => {
+    if (err || !gym) {
+      return res.status(400).json({
+        err: 'Gym not found in DB',
+      })
+    }
+    res.status(200).json(gym)
+  })
+}
+
+exports.getGymsbyLocation = (req, res, next) => {
+  const searchBy = 'address.' + req.query.searchby
+  const value = req.query.value
+  console.log('its searchby', searchBy, value)
+  const query = { [searchBy]: value }
+  Gym.find(query).exec((err, gyms) => {
+    if (err || !gyms) {
+      return res.status(400).json({
+        err: 'Gym not found in DB',
+      })
+    }
+    res.status(200).json(gyms)
+  })
+}
+
+exports.getGymsByGeoCode = (req, res, next) => {
+  const lat = req.query.lat
+  const lng = req.query.lng
+  const rad = req.query.rad
+  const options = {
+    location: {
+      $geoWithin: {
+        $centerSphere: [[lat, lng], rad / 6378.1],
+      },
+    },
+  }
+  console.log('its search by geo code', lat, lng, rad)
+  Gym.find(options).exec((err, gyms) => {
+    if (err || !gyms) {
+      return res.status(400).json({
+        err: 'Gym not found in DB',
+      })
+    }
+    res.status(200).json(gyms)
+  })
+}
+
 exports.addGym = (req, res) => {
   // console.log('we reached here', req.body, res.locals.url)
   const fields = req.body

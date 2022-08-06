@@ -1,7 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const { getUserById, updateUser } = require('../controllers/user')
-const { getGymById, addGym } = require('../controllers/gym')
+const {
+  getGymById,
+  getGymsById,
+  addGym,
+  getGymsbyLocation,
+  getGymsByGeoCode,
+} = require('../controllers/gym')
 const { s3Upload } = require('../controllers/s3Service')
 const multer = require('multer')
 
@@ -21,7 +27,9 @@ router.param('userId', getUserById)
 router.param('gymId', getGymById)
 
 //Routes
-// router.get("/gym/:gymId", isSignedIn, isAuthenticated, getGymById);
+router.get('/gym/:id', getGymsById)
+router.get('/gyms', getGymsbyLocation)
+router.get('/gymsbygeocode', getGymsByGeoCode)
 
 router.post(
   '/gym/reg/:userId',
