@@ -19,7 +19,7 @@ exports.getGymById = (req, res, next, id) => {
 exports.getGymsById = (req, res) => {
   const userId = req.params.id
   console.log('getGymByID hit', userId)
-  Gym.find({ _id: userId }).exec((err, gym) => {
+  Gym.find({ username: userId }).exec((err, gym) => {
     if (err || !gym) {
       return res.status(400).json({
         err: 'Gym not found in DB',
