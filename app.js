@@ -12,6 +12,7 @@ require('colors')
 const authRoutes = require('./routes/auth')
 const userRoutes = require('./routes/user')
 const gymRoutes = require('./routes/gym')
+const reviewRoutes = require('./routes/review')
 
 // var corsOptions = {
 //   origin: "*",
@@ -46,6 +47,7 @@ app.get('/', (req, res) => {
 app.use('/api', authRoutes)
 app.use('/api', userRoutes)
 app.use('/api', gymRoutes)
+app.use('/api', reviewRoutes)
 
 //PORT
 const port = process.env.PORT || 8000
